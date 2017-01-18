@@ -37,7 +37,7 @@ public class TestCsvBuffer {
 	public void shouldReturn200WhenSendingRequestToController() throws Exception {
 		@SuppressWarnings("rawtypes")
 		ResponseEntity<Map> entity = this.testRestTemplate.getForEntity(
-				"http://localhost:" + this.port + "/api/read-csv?filename=" + fileName + "&start=1&length=10&draw=1",
+				"http://localhost:" + this.port + "/api/read-csv?filename=" + fileName + "&start=1&length=-1&draw=1",
 				Map.class);
 
 		then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);

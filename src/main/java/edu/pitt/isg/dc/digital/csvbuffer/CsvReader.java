@@ -61,7 +61,11 @@ public class CsvReader {
 		long skip = start;
 		if (withHeader)
 			skip += 1;
-		Stream<String> filtered = lines.skip(skip).limit(length);
+		Stream<String> filtered;
+		if(length >= 0)
+			filtered = lines.skip(skip).limit(length);
+		else
+			filtered = lines.skip(skip);
 		return parse(filtered::iterator);
 	}
 
