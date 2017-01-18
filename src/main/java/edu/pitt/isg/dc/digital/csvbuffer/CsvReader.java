@@ -10,23 +10,38 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.opencsv.CSVParser;
 
+@Service
 public class CsvReader {
 
 	private Boolean withHeader = true;
-	private String fileDirectory = "src/main/resources/data/test/";
+	
+	@Autowired
+	private CsvConfiguration conf;
+	private CSV csv;
+	
+	public CsvReader(){
+		csv = new CSV();
+	}
+	
+	public CsvReader(String fileName) {
+		csv = new CSV();
+		csv.setTitle(fileName);
+	}
 
 	public CSV toCsv(String fileName, Long start, Long length, Integer draw) throws Exception {
+		String fileDirectory = conf.getFileDirectory();
 		String filePath = fileDirectory + fileName;
-		CSV csv = read(filePath, start, length, draw);
+		CSV csv = readCSV(filePath, start, length, draw);
 		csv.setTitle(fileName);
 		return csv;
 	}
 
-	CSV read(String filePath, Long start, Long length, Integer draw) throws Exception {
-
-		CSV csv = new CSV();
+	public CSV readCSV(String filePath, Long start, Long length, Integer draw) throws Exception {
 
 		Long recordsTotal = getRecordsTotal(filePath, withHeader);
 		csv.setRecordsTotal(recordsTotal);

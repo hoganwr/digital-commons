@@ -17,7 +17,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = CsvReadConfiguration.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(/*classes = CsvConfiguration.class,*/ webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = { "management.port=0" })
 public class TestCsvBuffer {
 
@@ -29,7 +29,7 @@ public class TestCsvBuffer {
 
 	@Autowired
 	private TestRestTemplate testRestTemplate;
-	private String fileDirectory = "src/main/resources/data/test/";
+	private String fileDirectory = "src/main/resources/data/";
 	private String fileName = "test.csv";
 	private String filePath = fileDirectory + fileName;
 
@@ -52,7 +52,7 @@ public class TestCsvBuffer {
 		Long length = 10L;
 		Long expectedTotal = 20L;
 		Long expectedFiltered = 20L;
-		CSV csv = new CsvReader().read(filePath, start, length, draw);
+		CSV csv = new CsvReader(fileName).readCSV(filePath, start, length, draw);
 		then(csv.getRecordsTotal()).isEqualTo(expectedTotal);
 		then(csv.getRecordsFiltered()).isEqualTo(expectedFiltered);
 		then(csv.getDraw()).isEqualTo(draw);
@@ -60,7 +60,7 @@ public class TestCsvBuffer {
 		start = 1L;
 		length = 5L;
 		expectedFiltered = 6L;
-		csv = new CsvReader().read(filePath, start, length, draw);
+		csv = new CsvReader(fileName).readCSV(filePath, start, length, draw);
 		then(csv.getRecordsTotal()).isEqualTo(expectedTotal);
 		then(csv.getRecordsFiltered()).isEqualTo(expectedFiltered);
 		then(csv.getDraw()).isEqualTo(draw);
