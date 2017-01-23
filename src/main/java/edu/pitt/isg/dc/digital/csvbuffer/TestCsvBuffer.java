@@ -52,17 +52,21 @@ public class TestCsvBuffer {
 		Long length = 10L;
 		Long expectedTotal = 20L;
 		Long expectedFiltered = 20L;
+		int expectedSize = 5;
 		CSV csv = new CsvReader(fileName).readCSV(filePath, start, length, draw);
 		then(csv.getRecordsTotal()).isEqualTo(expectedTotal);
 		then(csv.getRecordsFiltered()).isEqualTo(expectedFiltered);
+		then(csv.getData().size()).isEqualTo(expectedSize);
 		then(csv.getDraw()).isEqualTo(draw);
 
 		start = 1L;
 		length = 5L;
-		expectedFiltered = 6L;
+		expectedSize = 5;
+		expectedFiltered = 20L;
 		csv = new CsvReader(fileName).readCSV(filePath, start, length, draw);
 		then(csv.getRecordsTotal()).isEqualTo(expectedTotal);
 		then(csv.getRecordsFiltered()).isEqualTo(expectedFiltered);
+		then(csv.getData().size()).isEqualTo(expectedSize);
 		then(csv.getDraw()).isEqualTo(draw);
 	}
 }

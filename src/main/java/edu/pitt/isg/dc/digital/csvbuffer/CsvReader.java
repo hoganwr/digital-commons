@@ -54,7 +54,7 @@ public class CsvReader {
 		List<List<String>> data = getData(filePath, length, start, withHeader);
 		csv.setData(data);
 
-		Long recordsFiltered = getRecordsFiltered(data, start);
+		Long recordsFiltered = getRecordsFiltered(csv, recordsTotal);
 		csv.setRecordsFiltered(recordsFiltered);
 
 		csv.setDraw((int) draw);
@@ -62,12 +62,8 @@ public class CsvReader {
 		return csv;
 	}
 
-	private Long getRecordsFiltered(List<List<String>> data, Long start) {
-		long recordsFiltered = 0;
-		if (data.size() == 0)
-			return recordsFiltered;
-		recordsFiltered = start + data.size();
-		return recordsFiltered;
+	private Long getRecordsFiltered(CSV csv, Long recordsTotal) {
+		return recordsTotal;
 	}
 
 	private List<List<String>> getData(String filePath, Long length, Long start, Boolean withHeader)
