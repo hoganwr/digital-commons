@@ -23,5 +23,13 @@ public class CsvController {
     	String filePath = conf.getFileDirectory() + fileName;
         return new CsvReader(fileName).readCSV(filePath, start, length, draw);
     }
+    
+    @RequestMapping(value="api/summary", produces="application/json")
+    @ResponseBody
+    public Object summary(@RequestParam("filename") String fileName)
+    				throws Exception{
+    	String dir = conf.getFileDirectory();
+    	return new CsvReader().summary(dir, fileName);
+    }
 
 }

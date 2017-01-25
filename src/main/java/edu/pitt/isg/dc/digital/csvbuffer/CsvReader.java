@@ -1,6 +1,8 @@
 package edu.pitt.isg.dc.digital.csvbuffer;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -19,15 +21,15 @@ import com.opencsv.CSVParser;
 public class CsvReader {
 
 	private Boolean withHeader = true;
-	
+
 	@Autowired
 	private CsvConfiguration conf;
 	private CSV csv;
-	
-	public CsvReader(){
+
+	public CsvReader() {
 		csv = new CSV();
 	}
-	
+
 	public CsvReader(String fileName) {
 		csv = new CSV();
 		csv.setTitle(fileName);
@@ -73,7 +75,7 @@ public class CsvReader {
 		if (withHeader)
 			skip += 1;
 		Stream<String> filtered;
-		if(length >= 0)
+		if (length >= 0)
 			filtered = lines.skip(skip).limit(length);
 		else
 			filtered = lines.skip(skip);
@@ -110,5 +112,40 @@ public class CsvReader {
 			data.add(line.stream().map(s -> s.trim()).collect(Collectors.toList()));
 		}
 		return data;
+	}
+
+	public Object summary(String dir, String fileName) {
+		String s = null;
+		String result = "";
+		String filePath = dir + fileName;
+		String scriptPath = dir + "summary.py";
+
+		try {
+
+			Process p = Runtime.getRuntime().exec("python " + scriptPath + " " + filePath);
+
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+			while ((s = stdInput.readLine()) != null) {
+				result += s;
+
+			}
+
+			// read any errors from the attempted command
+			System.out.println("Here is the standard error of the command (if any):\n");
+			while ((s = stdError.readLine()) != null) {
+				System.out.println(s);
+			}
+
+			//System.exit(0);
+		} catch (IOException e) {
+			System.out.println("exception happened - here's what I know: ");
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
+		return result;
 	}
 }

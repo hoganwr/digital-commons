@@ -33,7 +33,7 @@ public class TestCsvBuffer {
 	private String fileName = "test.csv";
 	private String filePath = fileDirectory + fileName;
 
-	@Test
+	//@Test
 	public void shouldReturn200WhenSendingRequestToController() throws Exception {
 		@SuppressWarnings("rawtypes")
 		ResponseEntity<Map> entity = this.testRestTemplate.getForEntity(
@@ -45,7 +45,7 @@ public class TestCsvBuffer {
 		then(entity.getBody().get("data")).asList().contains(Arrays.asList(new String[] {"1", "2", "3"}));
 	}
 
-	@Test
+	//@Test
 	public void testReadCSV() throws Exception {
 		Integer draw = 1;
 		Long start = 15L;
@@ -68,5 +68,13 @@ public class TestCsvBuffer {
 		then(csv.getRecordsFiltered()).isEqualTo(expectedFiltered);
 		then(csv.getData().size()).isEqualTo(expectedSize);
 		then(csv.getDraw()).isEqualTo(draw);
+	}
+	
+	@Test
+	public void testSummary(){
+		String dir = "src/main/resources/data/";
+		String fileName = "Measles_Cases_1980-1985.csv";
+		String summary = (String) new CsvReader().summary(dir, fileName);
+		System.out.println(summary);
 	}
 }
